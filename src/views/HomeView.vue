@@ -80,6 +80,12 @@ function goTo (val) {
         </li>
       </ul>
     </div>
+    <h1 class="title is-5">
+      SuperHome My Products Card Builder
+    </h1>
+    <h2 class="subtitle is-6">
+      Here, you can play around with text lengths and copy for creating "My Products" cards. The first card on the right-hand side will change instanteously to show the current scenario. Additionally, you can choose from the 3 configurations using the tabs above. When you click on "Save" at the bottom of the screen, the card is saved. You can see all saved card for that specific product on this page, but the entire list of saved cards is visible in the "Browse" section.
+    </h2>
     <div class="field">
       <label class="label">Product Name</label>
       <div class="field has-addons">
