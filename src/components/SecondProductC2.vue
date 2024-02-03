@@ -19,7 +19,7 @@ function messageSplit(text) {
 <template>
   <div :class="'obj-2-wrapper c2 ' + config.c2_color">
     <div class="second-heading">
-      <Marquee :text="config.message_2" text-class="second-heading"/>
+      <Marquee :text="config.message_2" text-class="second-heading" :badge="true"/>
     </div>
     <div class="second-field cta">
       {{ config.field_cta }}
@@ -31,13 +31,27 @@ function messageSplit(text) {
 
 .obj-2-wrapper.c2.green {
   background: linear-gradient(99.63deg, rgba(130, 225, 76, 0.16) 0%, rgba(130, 225, 76, 0.04) 61.92%);
+
+  & .second-heading strong {
+    background-color: #EDEDEE;
+  }
 }
 
 .obj-2-wrapper.c2.orange {
   background: linear-gradient(270deg, #FFE7D5 0%, #FFB681 100%);
+
+  & .second-heading strong {
+    background-color: #FFE7D5;
+    color: #DD640C;
+  }
 }
 
 .obj-2-wrapper.c2.red {
   background: linear-gradient(270deg, rgba(255, 227, 231, 0) 0%, #FF8F9C 100%);
+
+  & .second-heading strong {
+    background-color: #FFE3E7;
+    color: #D6273C;
+  }
 }
 </style>

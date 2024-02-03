@@ -8,34 +8,29 @@ import SecondProductC3 from './SecondProductC3.vue'
 import { defineProps, toRefs } from 'vue'
 
 const props = defineProps({
-  configuration: {
-    type: String,
-    default: "C1",
-  },
   config: {
     type: Object,
     default: {}
   }
 });
 
-const { configuration, config } = toRefs(props);
-
 </script>
 <template>
   <div class="product-base">
+    <div class="notif-dot" v-if="config.notif_dot && !(config.type == 'Data + CTA' && (config.c2_color == 'orange' || config.c2_color == 'red'))"></div>
     <img class="img" src="../assets/img/logo.png">
     <span class="obj-1">
       <div class="prod-heading">{{ config.product_name }}</div>
       <div class="main-field"><Rupee v-if="config.rupee"/><span class="main-field-content">{{ config.primary_field }}</span></div>
     </span>
     <span class="obj-2">
-      <template v-if="configuration == 'C1'">
+      <template v-if="config.type == 'Data Points'">
         <SecondProductC1 :config="config"/>
       </template>
-      <template v-else-if="configuration == 'C2'">
+      <template v-else-if="config.type == 'Data + CTA'">
         <SecondProductC2 :config="config"/>
       </template>
-      <template v-else-if="configuration == 'C3'">
+      <template v-else-if="config.type == 'Message'">
         <SecondProductC3 :config="config"/>
       </template>
       <template v-else>
@@ -52,6 +47,19 @@ const { configuration, config } = toRefs(props);
   padding: 12px;
   position: relative;
   height: 70px;
+  cursor: pointer;
+}
+
+.notif-dot {
+  position: absolute;
+  z-index: 3;
+  right: -8px;
+  top: calc(50% - 8px);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 4px solid #F0F0F7;
+  background-color: #E12B1D;
 }
 
 img.img {
@@ -130,6 +138,7 @@ img.img {
   color: #09733e;
 }
 
+.second-heading strong,
 .third-field {
   background-color: #EDEDEE;
   color: #585b7d;

@@ -1,30 +1,67 @@
 <script setup>
 import ProductBase from '../components/ProductBase.vue';
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 
-const config = ref({
-  product_name: "Product Name",
-  rupee: true,
-  primary_field: "1,00,000",
-  heading_2: "Rewards Earned",
-  c2_color: "green",
-  field_2: "₹1,000",
-  message_2: "Next EMI",
-  field_cta: "Pay Now",
-  third_field_type: 'Bottom',
-  field_3: "₹37/day",
-  message: "Large message that goes to 2 lines\nThis is the second paragraph"
-})
+import { useDatabaseList, useDatabaseObject } from 'vuefire'
+import { firebaseWriter } from '../firebase.js'
+const dbVals = useDatabaseList(firebaseWriter.ref('/cards'))
+const loaded = useDatabaseObject(firebaseWriter.ref('/status'))
+
+import { useConfigStore, baseState } from '../stores/config.js'
+const config = useConfigStore()
 
 const tabList = ref(['Data Points', 'Data + CTA', 'Message'])
-const activeTab = ref(tabList.value[0])
 
-function configuration () {
-  return {
-    "Data Points": "C1",
-    "Data + CTA": "C2",
-    "Message": "C3"
-  }[activeTab.value]
+function resetState () {
+  config.$patch(baseState)
+  router.push('/')
+}
+
+function relevantData () {
+  let keys = ['type', 'product_name', 'rupee', 'primary_field', 'notif_dot'].concat({
+    "Data Points": ['heading_2', 'field_2', 'third_field_type', 'field_3'],
+    "Data + CTA": ['message_2', 'field_cta', 'c2_color'],
+    "Message": ['message']
+  }[config.type])
+
+  let newObj = {}
+
+  keys.forEach((key) => {
+    newObj[key] = config[key]
+  })
+
+  if (newObj.type == 'Data + CTA' && ['orange', 'red'].includes(newObj.c2_color)) {
+    newObj.notif_dot = false
+  }
+
+  return newObj
+}
+
+function saveRelevantData () {
+  let d = relevantData()
+  console.log(JSON.stringify(relevantData()))
+  if (route.params.id) {
+    firebaseWriter.set(`/cards/${route.params.id}`, relevantData())
+  } else {
+    firebaseWriter.push('/cards', relevantData())
+  }
+}
+
+function getSavedCards (product) {
+  return dbVals.value.filter((v) => v.product_name == product)
+}
+
+function delCard(val) {
+  firebaseWriter.del(`/cards/${val}`)
+  router.push('/')
+}
+
+function goTo (val) {
+  config.$patch(val)
+  router.push(`/edit/${val.id}`)
 }
 </script>
 
@@ -36,8 +73,8 @@ function configuration () {
       <ul>
         <li
           v-for="tab in tabList"
-          :class="{'is-active': activeTab == tab}"
-          @click="activeTab = tab"
+          :class="{'is-active': config.type == tab}"
+          @click="config.type = tab; config.type = tab"
         >
           <a>{{ tab }}</a>
         </li>
@@ -65,8 +102,14 @@ function configuration () {
         <input class="input" type="text" v-model="config.primary_field">
       </div>
     </div>
+    <div class="field">
+      <label class="checkbox label" :disabled="config.type == 'Data + CTA' && (config.c2_color == 'orange' || config.c2_color == 'red')">
+        <input type="checkbox" v-model="config.notif_dot" :disabled="config.type == 'Data + CTA' && (config.c2_color == 'orange' || config.c2_color == 'red')">
+        Notification Dot?
+      </label>
+    </div>
     <hr>
-    <template v-if="activeTab == 'Data Points'">
+    <template v-if="config.type == 'Data Points'">
       <div class="field is-horizontal">
         <div class="field-body">
           <div class="field">
@@ -84,7 +127,7 @@ function configuration () {
         </div>
       </div>
     </template>
-    <template v-if="activeTab == 'Data + CTA'">
+    <template v-if="config.type == 'Data + CTA'">
       <div class="field">
         <label class="label">Status</label>
         <div class="control">
@@ -119,7 +162,7 @@ function configuration () {
         </div>
       </div>
     </template>
-    <template v-if="activeTab == 'Data Points'">
+    <template v-if="config.type == 'Data Points'">
       <div class="field is-horizontal">
         <div class="field-body">
           <div class="field">
@@ -148,7 +191,7 @@ function configuration () {
         </div>
       </div>
     </template>
-    <template v-if="activeTab == 'Message'">
+    <template v-if="config.type == 'Message'">
       <div class="field">
         <label class="label">Message</label>
         <div class="control">
@@ -156,15 +199,28 @@ function configuration () {
         </div>
       </div>
     </template>
+    <div class="buttons">
+      <button class="button is-primary is-fullwidth" @click="saveRelevantData" v-if="!route.params.id">Save</button>
+      <button class="button is-warning is-fullwidth" @click="saveRelevantData" v-if="route.params.id">Update</button>
+      <button class="button is-outlined is-danger is-fullwidth" @click="delCard(route.params.id)" v-if="route.params.id">Delete</button>
+      <button class="button is-default text-right" @click="resetState()">Reset</button>
+    </div>
   </div>
   <div class="column is-6">
     <main class="main">
       <div class="header">
         My Products
       </div>
-      <ProductBase configuration="C1" :config="config" v-if="activeTab == 'Data Points'"/>
-      <ProductBase configuration="C2" :config="config" v-if="activeTab == 'Data + CTA'"/>
-      <ProductBase configuration="C3" :config="config" v-if="activeTab == 'Message'"/>
+      <div @click="router.push('/')">
+        <ProductBase :config="config"/>
+      </div>
+      <div class="header mt-5" v-if="getSavedCards(config.product_name).length > 0">
+        Saved Cards
+      </div>
+      <button class="button is-loading is-fullwidth" v-if="!loaded">Loading</button>
+      <div v-for="val in getSavedCards(config.product_name)" @click="goTo(val)">
+        <ProductBase :config="val"/>
+      </div>
     </main>
   </div>
 </div>
