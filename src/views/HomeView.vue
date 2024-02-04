@@ -51,7 +51,7 @@ function saveRelevantData () {
 }
 
 function getSavedCards (product) {
-  return dbVals.value.filter((v) => v.product_name == product)
+  return dbVals.value.filter((v) => v.product_name.toLowerCase() == product.toLowerCase())
 }
 
 function delCard(val) {

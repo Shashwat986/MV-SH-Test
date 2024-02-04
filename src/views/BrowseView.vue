@@ -12,14 +12,14 @@ const dbVals = useDatabaseList(firebaseWriter.ref('/cards'))
 const loaded = useDatabaseObject(firebaseWriter.ref('/status'))
 
 function getSavedCards (product) {
-  return dbVals.value.filter((v) => v.product_name == product)
+  return dbVals.value.filter((v) => v.product_name.toLowerCase() == product.toLowerCase())
 }
 
 function getProducts () {
   let products = []
   dbVals.value.forEach((v) => {
-    if (!products.includes(v.product_name)) {
-      products.push(v.product_name)
+    if (!products.includes(v.product_name.toLowerCase())) {
+      products.push(v.product_name.toLowerCase())
     }
   })
 

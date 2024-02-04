@@ -8,7 +8,7 @@ export const baseState = {
     primary_field: "1,00,000",
     notif_dot: false,
     heading_2: "Rewards Earned",
-    c2_color: "orange",
+    c2_color: "green",
     field_2: "₹1,000",
     message_2: "Next EMI #7 Days#",
     field_cta: "Pay Now",
