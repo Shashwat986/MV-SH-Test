@@ -88,6 +88,12 @@ function goTo (val) {
     </h2>
     <div class="field">
       <label class="label">Product Name</label>
+      <div class="control is-expanded">
+        <input class="input" type="text" v-model="config.product_name">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Primary Field</label>
       <div class="field has-addons">
         <p class="control">
           <span class="select">
@@ -98,14 +104,8 @@ function goTo (val) {
           </span>
         </p>
         <div class="control is-expanded">
-          <input class="input" type="text" v-model="config.product_name">
+          <input class="input" type="text" v-model="config.primary_field">
         </div>
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">Primary Field</label>
-      <div class="control">
-        <input class="input" type="text" v-model="config.primary_field">
       </div>
     </div>
     <div class="field">
