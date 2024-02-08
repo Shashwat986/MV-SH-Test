@@ -38,7 +38,7 @@ function goTo (val) {
 
 <template>
 <div class="container">
-<div class="columns" v-if="loaded">
+<div class="columns is-multiline" v-if="loaded">
   <div class="column is-4" v-for="product in getProducts()">
     <main class="main browse">
       <div class="header mt-5">
