@@ -6,11 +6,14 @@ import { RouterLink, RouterView } from 'vue-router'
   <nav class="navbar is-primary is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-menu">
       <div class="navbar-start">
-        <router-link class="navbar-item" to="/">
-          Create
-        </router-link>
         <router-link class="navbar-item" to="/browse">
           Browse
+        </router-link>
+        <router-link class="navbar-item" to="/">
+          Create Cards
+        </router-link>
+        <router-link class="navbar-item" to="/banners">
+          Create Banners
         </router-link>
       </div>
     </div>

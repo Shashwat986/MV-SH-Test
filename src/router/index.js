@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import BannerCreateView from '../views/BannerCreateView.vue'
 import BrowseView from '../views/BrowseView.vue'
 
 const router = createRouter({
@@ -20,7 +21,16 @@ const router = createRouter({
       name: 'edit',
       component: HomeView
     },
-
+    {
+      path: '/banners',
+      name: 'bannerhome',
+      component: BannerCreateView
+    },
+    {
+      path: '/banners/edit/:id',
+      name: 'banneredit',
+      component: BannerCreateView
+    },
   ]
 })
 
