@@ -25,7 +25,7 @@ function getSavedBanners (product) {
 }
 
 function getProducts () {
-  let products = []
+  let products = ["Example"]
   dbVals.value.forEach((v) => {
     if (!products.includes(v.product_name.toLowerCase())) {
       products.push(v.product_name.toLowerCase())
