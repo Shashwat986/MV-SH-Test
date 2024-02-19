@@ -17,7 +17,9 @@ const props = defineProps({
 </script>
 <template>
   <div :class="'banner-base ' + config.color">
-    <img class="banner-img" :src="'src/assets/img/banner-' + config.color + '.png'">
+    <img class="banner-img" src="../assets/img/banner-red.png" v-if="config.color == 'red'">
+    <img class="banner-img" src="../assets/img/banner-yellow.png" v-if="config.color == 'yellow'">
+    <img class="banner-img" src="../assets/img/banner-blue.png" v-if="config.color == 'blue'">
     <div class="banner-content-parent">
       <div class="banner-content">
         <div class="banner-title">
