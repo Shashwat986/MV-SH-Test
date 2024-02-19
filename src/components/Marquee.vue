@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, toRefs } from 'vue'
+import { defineProps, toRefs, ref, onMounted } from 'vue'
 
 const props = defineProps({
   text: {
@@ -17,11 +17,9 @@ const props = defineProps({
 const { text, badge } = toRefs(props)
 
 function messageSplit(text) {
-  console.log(badge.value, text)
   if (badge.value) {
     return text.split("\n").slice(0, 2).map((str) => {
       let newStr = str.replace('#', '<strong>').replace('#', '</strong>')
-      console.log(newStr)
       return newStr
     })
   } else {
@@ -29,11 +27,19 @@ function messageSplit(text) {
   }
 }
 
-console.log(messageSplit(text.value))
+const intervalId = ref(null)
+const pauseMarquee = ref(false)
+onMounted( () => {
+  intervalId.value = setInterval(() => {
+    pauseMarquee.value = true
+    setTimeout(() => pauseMarquee.value = false, 300)
+  }, 2300)
+
+})
 </script>
 
 <template>
-  <Vue3Marquee :vertical="true" :duration="2" v-if="messageSplit(text).length > 1">
+  <Vue3Marquee :vertical="true" :duration="4" v-if="messageSplit(text).length > 1" :pause="pauseMarquee">
     <div v-for="t in messageSplit(text)" :class="['mb-3', textClass]">
       <span v-html="t"/>
     </div>
