@@ -9,7 +9,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <router-link class="navbar-item" to="/browse">
           Browse
         </router-link>
-        <router-link class="navbar-item" to="/">
+        <router-link class="navbar-item" to="/cards">
           Create Cards
         </router-link>
         <router-link class="navbar-item" to="/banners">

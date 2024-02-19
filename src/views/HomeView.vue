@@ -17,7 +17,7 @@ const tabList = ref(['Data Points', 'Data + CTA', 'Message'])
 
 function resetState () {
   config.$patch(baseState)
-  router.push('/')
+  router.push('/cards')
 }
 
 function relevantData () {
@@ -56,12 +56,12 @@ function getSavedCards (product) {
 
 function delCard(val) {
   firebaseWriter.del(`/cards/${val}`)
-  router.push('/')
+  router.push('/cards')
 }
 
 function goTo (val) {
   config.$patch(val)
-  router.push(`/edit/${val.id}`)
+  router.push(`/cards/edit/${val.id}`)
 }
 </script>
 
@@ -217,7 +217,7 @@ function goTo (val) {
       <div class="header">
         My Products
       </div>
-      <div @click="router.push('/')">
+      <div @click="router.push('/cards')">
         <ProductBase :config="config"/>
       </div>
       <div class="header mt-5" v-if="getSavedCards(config.product_name).length > 0">

@@ -43,7 +43,7 @@ function getProducts () {
 
 function goTo (val) {
   config.$patch(val)
-  router.push(`/edit/${val.id}`)
+  router.push(`/cards/edit/${val.id}`)
 }
 
 function goToBanner (val) {

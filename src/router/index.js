@@ -9,7 +9,11 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: BrowseView
+    },
+    {
+      path: '/edit/:id',
+      redirect: '/'
     },
     {
       path: '/browse',
@@ -17,8 +21,13 @@ const router = createRouter({
       component: BrowseView
     },
     {
-      path: '/edit/:id',
-      name: 'edit',
+      path: '/cards',
+      name: 'cardhome',
+      component: HomeView
+    },
+    {
+      path: '/cards/edit/:id',
+      name: 'cardedit',
       component: HomeView
     },
     {
